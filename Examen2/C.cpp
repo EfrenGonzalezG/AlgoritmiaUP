@@ -1,29 +1,43 @@
-#include <queue>
-#include <stdio.h>
 #include <iostream>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
-long long n,x,a,b,R,t;
-priority_queue<long long> pq;
+long long A[110],B[110],C[110],D[110],t,n,m,k,a,x,i,Rec,Cor;
+
+int Revisar(int o)
+{
+    Rec=0;
+    for (i=0;i<n;i++)
+        if (A[i]<=o) Rec+=1+((o-A[i])/B[i]);
+    Cor=0;
+    o=t-o;
+    for (i=0;i<m;i++)
+        if (C[i]<=o) Cor+=1+((o-C[i])/D[i]);
+    if (Rec==Cor) return 0;
+    else if (Rec<Cor) return 1;
+    return 2;
+}
 
 int main()
 {
-    scanf("%lld",&t);
-    while (t--){
-        R=0;
-        scanf("%lld",&n);
-        while(n--){
-            scanf("%lld",&x);
-            pq.push(-x);
+    cin>>t;
+    cin>>n;
+    for (i=0;i<n;i++) cin>>A[i]>>B[i];
+    cin>>m;
+    for (i=0;i<m;i++) cin>>C[i]>>D[i];
+    k=1;
+    a=t/2;
+    while (1)
+    {
+        x=Revisar(k);
+        if (x==0 || a==0) cout<<k<<endl;
+        else if (x==1) k+=a;
+        else
+        {
+            k-=a;
+            a/=2;
         }
-        while(pq.size()>1){
-            a=pq.top(),pq.pop();
-            b=pq.top(),pq.pop();
-            R+=a+b;
-            pq.push(a+b);
-        }
-        pq.pop();
-        printf("%lld",-R);
     }
 }
